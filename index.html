@@ -3,542 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tea Personality Quiz</title>
+    <title>The Tea-ology Personality Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ========== BRANDING CUSTOMIZATION SECTION ========== */
+        /* Update these values to match your brand */
+        
+        /* FONTS - Replace with your brand fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        /* COLORS - Update these hex codes to match your brand palette */
+        :root {
+            --brand-primary: #60bbb5;      /* Main brand color */
+            --brand-secondary: #f9aab4;    /* Secondary brand color */
+            --brand-accent: #95a09d;       /* Accent color */
+            --brand-light: #DEB887;        /* Light brand color */
+            --brand-lightest: #F5DEB3;     /* Lightest brand color */
+            --text-primary: #ffffff;       /* Primary text color */
+            --text-secondary: #f3e8ff;     /* Secondary text color */
         }
-
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);
-            min-height: 100vh;
-            padding: 20px;
+        
+        /* BACKGROUND GRADIENT - Customize your brand gradient */
+        .tea-gradient {
+            background: linear-gradient(135deg, 
+                var(--brand-primary) 0%, 
+                var(--brand-secondary) 25%, 
+                var(--brand-accent) 50%, 
+                var(--brand-light) 75%, 
+                var(--brand-lightest) 100%);
         }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
+        
+        /* BRAND FONTS - Update font families */
+        .brand-heading { font-family: 'Playfair Display', serif; }
+        .brand-body { font-family: 'Inter', sans-serif; }
+        
+        /* ========== END CUSTOMIZATION SECTION ========== */
+        
+        .question-enter {
+            animation: slideInRight 0.5s ease-out;
         }
-
-        .header {
-            background: linear-gradient(45deg, #1d3557, #457b9d);
-            color: white;
-            padding: 30px;
-            text-align: center;
+        
+        .question-exit {
+            animation: slideOutLeft 0.5s ease-out;
         }
-
-        .store-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            overflow: hidden;
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
-
-        .store-logo img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 50%;
+        
+        @keyframes slideOutLeft {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
         }
-
-        .store-logo-placeholder {
-            font-size: 2em;
-            color: #1d3557;
-        }
-
-        .store-name {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            opacity: 0.9;
-            font-weight: bold;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-            font-style: italic;
-        }
-
-        .quiz-content {
-            padding: 30px;
-        }
-
-        .question {
-            display: none;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .question.active {
-            display: block;
-        }
-
-        .question h3 {
-            color: #1d3557;
-            margin-bottom: 20px;
-            font-size: 1.4em;
-            text-align: center;
-        }
-
-        .options {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .option {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .option:hover {
-            background: #e1f4f3;
-            border-color: #457b9d;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(69, 123, 157, 0.2);
-        }
-
-        .option:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .option:hover:before {
-            left: 100%;
-        }
-
-        .progress {
-            background: #e9ecef;
-            height: 8px;
-            border-radius: 4px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            background: linear-gradient(45deg, #457b9d, #a8dadc);
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-            box-shadow: 0 2px 4px rgba(69, 123, 157, 0.3);
-        }
-
-        .result {
-            display: none;
-            text-align: center;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        .result.active {
-            display: block;
-        }
-
-        .tea-emoji {
-            font-size: 4em;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .tea-name {
-            font-size: 2.5em;
-            color: #1d3557;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .tea-description {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #495057;
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #457b9d;
-        }
-
-        .restart-btn {
-            background: linear-gradient(45deg, #457b9d, #a8dadc);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.1em;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(69, 123, 157, 0.3);
-        }
-
-        .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(69, 123, 157, 0.4);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: white;
-            font-size: 1.3em;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-        }
-
-        .instagram { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
-        .facebook { background: #1877F2; }
-        .twitter { background: #1DA1F2; }
-        .tiktok { background: #000; }
-        .youtube { background: #FF0000; }
-        .website { background: #457b9d; }
-
-        .social-link:hover {
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-        }
-
-        .footer {
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            border-top: 2px solid #e9ecef;
-        }
-
-        .footer-text {
-            color: #6c757d;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-
-        .store-info {
-            color: #495057;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
-
-        .question-counter {
-            text-align: center;
-            color: #6c757d;
-            margin-bottom: 20px;
-            font-weight: bold;
+        
+        .tea-steam {
+            animation: steam 3s ease-in-out infinite;
+        }
+        
+        @keyframes steam {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-10px) rotate(5deg); opacity: 1; }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .option-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .option-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 90, 60, 0.2);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <!-- REPLACE THIS SECTION WITH YOUR LOGO AND STORE INFO -->
-               <div class="store-logo">
-                <!-- REPLACE "logo.png" with your actual logo filename -->
-                <img src="logo.jpg" alt="Your Store Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <!-- Fallback tea emoji if logo doesn't load -->
-                <div class="store-logo-placeholder" style="display: none;">🍃</div>
+<body class="min-h-screen tea-gradient font-['Inter']">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8 fade-in">
+            <!-- BRAND LOGO SECTION - Replace with your logo -->
+            <div class="mb-4">
+                <!-- Option 1: Replace emoji with your logo image -->
+                <div class="text-6xl mb-2 tea-steam">logo.jpg</div>
+                <!-- Option 2: Uncomment and add your logo URL -->
+                <!-- <img src="YOUR_LOGO_URL_HERE" alt="Your Brand Logo" class="h-16 mx-auto mb-2" onerror="this.style.display='none'"> -->
+                
+                <!-- Option 3: Add your brand name -->
+                <!-- <div class="text-2xl font-bold text-white mb-2">YOUR BRAND NAME</div> -->
             </div>
-            <div class="store-name">The Tea-ology Boutique</div>
-            <!-- END REPLACEMENT SECTION -->
             
-            <h1>Tea Personality Quiz</h1>
-            <p>Discover which tea perfectly matches your unique vibe!</p>
-            
-            <!-- SOCIAL MEDIA LINKS - REPLACE WITH YOUR ACTUAL LINKS -->
-            <div class="social-links">
-                <a href="https://instagram.com/theteaologyboutique" class="social-link instagram" target="_blank">IG</a>
-                  <a href="https://tiktok.com/@teaology_" class="social-link tiktok" target="_blank">TT</a>
-                <a href="https://theteaologyboutique.etsy.com" class="social-link website" target="_blank">ES</a>
+            <!-- QUIZ TITLE - Customize this -->
+            <h1 class="text-4xl brand-heading font-bold text-white mb-2">The Tea-ology Personality Quiz</h1>
+            <p class="text-amber-100 text-lg brand-body">Discover which tea matches your personality!</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-8 fade-in">
+            <div class="bg-white/20 rounded-full h-3 overflow-hidden">
+                <div id="progressBar" class="progress-bar bg-white h-full rounded-full" style="width: 0%"></div>
+            </div>
+            <p class="text-white text-center mt-2 text-sm">
+                Question <span id="currentQuestion">0</span> of <span id="totalQuestions">6</span>
+            </p>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 fade-in">
+            <h2 class="text-2xl font-['Playfair_Display'] font-semibold text-white mb-4">Ready to discover your tea personality?</h2>
+            <p class="text-amber-100 mb-6">Answer 6 questions and find out which tea perfectly matches who you are!</p>
+            <button onclick="startQuiz()" class="bg-white text-amber-800 px-8 py-3 rounded-full font-semibold text-lg hover:bg-amber-50 transition-all duration-300 transform hover:scale-105">
+                Start Quiz ✨
+            </button>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="hidden">
+            <div id="questionCard" class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+                <h2 id="questionText" class="text-xl font-['Playfair_Display'] font-semibold text-white mb-6 text-center"></h2>
+                <div id="optionsContainer" class="space-y-3"></div>
             </div>
         </div>
 
-        <div class="quiz-content">
-            <div class="progress">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-
-            <div class="question active" id="q1">
-                <div class="question-counter">Question 1 of 6</div>
-                <h3>It's Sunday morning. What's your ideal way to start the day?</h3>
-                <div class="options">
-                    <div class="option" onclick="answer('q1', 'peaceful')">🧘‍♀️ Meditation and quiet reflection</div>
-                    <div class="option" onclick="answer('q1', 'energetic')">🏃‍♀️ Quick workout and ready to conquer the world</div>
-                    <div class="option" onclick="answer('q1', 'social')">☕ Brunch with friends and lots of laughter</div>
-                    <div class="option" onclick="answer('q1', 'cozy')">📚 Curled up with a book and soft blankets</div>
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="hidden text-center">
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 fade-in">
+                <div id="resultEmoji" class="text-6xl mb-4"></div>
+                <h2 class="text-3xl font-['Playfair_Display'] font-bold text-white mb-4">You are...</h2>
+                <h3 id="resultTitle" class="text-2xl font-['Playfair_Display'] font-semibold text-amber-200 mb-4"></h3>
+                <p id="resultDescription" class="text-white text-lg mb-6 leading-relaxed"></p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                    <button onclick="shareResult()" class="bg-white text-amber-800 px-6 py-3 rounded-full font-semibold hover:bg-amber-50 transition-all duration-300 transform hover:scale-105">
+                        Share Result 📱
+                    </button>
+                    <button onclick="restartQuiz()" class="bg-amber-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105">
+                        Take Again 🔄
+                    </button>
                 </div>
-            </div>
-
-            <div class="question" id="q2">
-                <div class="question-counter">Question 2 of 6</div>
-                <h3>Your friends would describe you as...</h3>
-                <div class="options">
-                    <div class="option" onclick="answer('q2', 'energetic')">⚡ The energizer bunny of the group</div>
-                    <div class="option" onclick="answer('q2', 'peaceful')">🕊️ The calm voice of reason</div>
-                    <div class="option" onclick="answer('q2', 'sophisticated')">🎭 Refined and cultured</div>
-                    <div class="option" onclick="answer('q2', 'cozy')">🤗 Warm and comforting to be around</div>
+                
+                <!-- SOCIAL MEDIA LINKS SECTION - Add your social media -->
+                <div class="border-t border-white/20 pt-6">
+                    <p class="text-white/80 text-sm mb-4">Follow us for more fun quizzes!</p>
+                    <div class="flex justify-center gap-4">
+                        <!-- Replace # with your actual social media URLs -->
+                        <a href="#" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Instagram">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="#" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Twitter/X">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="#" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Facebook">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="#" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="TikTok">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                        </a>
+                        
+                        <!-- Add more social platforms as needed -->
+                        <a href="#" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="YouTube">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="question" id="q3">
-                <div class="question-counter">Question 3 of 6</div>
-                <h3>When you're stressed, you prefer to...</h3>
-                <div class="options">
-                    <div class="option" onclick="answer('q3', 'peaceful')">🌸 Take deep breaths and find your center</div>
-                    <div class="option" onclick="answer('q3', 'energetic')">🎵 Dance it out or go for a run</div>
-                    <div class="option" onclick="answer('q3', 'sophisticated')">🍷 Enjoy something luxurious and indulgent</div>
-                    <div class="option" onclick="answer('q3', 'cozy')">🛁 Take a warm bath and pamper yourself</div>
-                </div>
-            </div>
-
-            <div class="question" id="q4">
-                <div class="question-counter">Question 4 of 6</div>
-                <h3>Your ideal vacation would be...</h3>
-                <div class="options">
-                    <div class="option" onclick="answer('q4', 'peaceful')">🏔️ A silent retreat in the mountains</div>
-                    <div class="option" onclick="answer('q4', 'energetic')">🏄‍♀️ Adventure sports and exploring new cities</div>
-                    <div class="option" onclick="answer('q4', 'sophisticated')">🏛️ Art galleries and fine dining in Paris</div>
-                    <div class="option" onclick="answer('q4', 'cozy')">🏡 A charming cottage with a fireplace</div>
-                </div>
-            </div>
-
-            <div class="question" id="q5">
-                <div class="question-counter">Question 5 of 6</div>
-                <h3>Your work style is best described as...</h3>
-                <div class="options">
-                    <div class="option" onclick="answer('q5', 'energetic')">🚀 Fast-paced and results-driven</div>
-                    <div class="option" onclick="answer('q5', 'peaceful')">⚖️ Thoughtful and well-balanced</div>
-                    <div class="option" onclick="answer('q5', 'sophisticated')">💼 Strategic and detail-oriented</div>
-                    <div class="option" onclick="answer('q5', 'cozy')">🤝 Collaborative and people-focused</div>
-                </div>
-            </div>
-
-            <div class="question" id="q6">
-                <div class="question-counter">Question 6 of 6</div>
-                <h3>At a party, you're most likely to...</h3>
-                <div class="options">
-                    <div class="option" onclick="answer('q6', 'social')">🎉 Be the life of the party</div>
-                    <div class="option" onclick="answer('q6', 'peaceful')">🌱 Have meaningful one-on-one conversations</div>
-                    <div class="option" onclick="answer('q6', 'sophisticated')">🥂 Appreciate the finer details and ambiance</div>
-                    <div class="option" onclick="answer('q6', 'cozy')">🍪 Help the host and make sure everyone feels welcome</div>
-                </div>
-            </div>
-
-            <!-- Results -->
-            <div class="result" id="result-energetic">
-                <span class="tea-emoji">🍃</span>
-                <div class="tea-name">Green Tea</div>
-                <div class="tea-description">
-                    You're vibrant, energetic, and always ready for your next adventure! Like green tea, you're packed with vitality and bring a fresh perspective to everything you do. You love starting your day with purpose and tackle challenges head-on. Your natural energy inspires others, and you're always looking for ways to grow and improve.
-                </div>
-                <div class="social-share">
-                    <div class="share-text">Share your tea personality:</div>
-                    <button class="restart-btn" onclick="shareResult('Green Tea')">Share Result</button>
-                </div>
-            </div>
-
-            <div class="result" id="result-peaceful">
-                <span class="tea-emoji">🌸</span>
-                <div class="tea-name">Chamomile Tea</div>
-                <div class="tea-description">
-                    You're the zen master of your friend group – calm, wise, and naturally soothing to be around. Like chamomile tea, you bring peace wherever you go and help others find their balance. You prefer quality over quantity in all aspects of life and have a gift for seeing the bigger picture. Your gentle strength is your superpower.
-                </div>
-                <div class="social-share">
-                    <div class="share-text">Share your tea personality:</div>
-                    <button class="restart-btn" onclick="shareResult('Chamomile Tea')">Share Result</button>
-                </div>
-            </div>
-
-            <div class="result" id="result-sophisticated">
-                <span class="tea-emoji">☕</span>
-                <div class="tea-name">Earl Grey</div>
-                <div class="tea-description">
-                    You have exquisite taste and appreciate the finer things in life. Like Earl Grey, you're classic, refined, and have a distinctive character that stands out in a crowd. You value tradition but aren't afraid to add your own unique twist to things. Your sophisticated approach to life inspires others to elevate their own standards.
-                </div>
-                <div class="social-share">
-                    <div class="share-text">Share your tea personality:</div>
-                    <button class="restart-btn" onclick="shareResult('Earl Grey')">Share Result</button>
-                </div>
-            </div>
-
-            <div class="result" id="result-cozy">
-                <span class="tea-emoji">🫖</span>
-                <div class="tea-name">Chai Tea</div>
-                <div class="tea-description">
-                    You're warm, comforting, and have a wonderful blend of different qualities that make you irresistible. Like chai tea, you're complex and full of delightful surprises. You create a sense of home wherever you go and have a natural ability to bring people together. Your nurturing spirit and cozy energy make everyone feel loved and accepted.
-                </div>
-                <div class="social-share">
-                    <div class="share-text">Share your tea personality:</div>
-                    <button class="restart-btn" onclick="shareResult('Chai Tea')">Share Result</button>
-                </div>
-            </div>
-
-            <div class="result" id="result-social">
-                <span class="tea-emoji">🧊</span>
-                <div class="tea-name">Iced Tea</div>
-                <div class="tea-description">
-                    You're refreshing, social, and adaptable to any situation! Like iced tea, you're perfect for any gathering and know how to keep things cool and fun. You have a knack for bringing people together and making every moment memorable. Your upbeat personality and flexibility make you everyone's favorite companion for any adventure.
-                </div>
-                <div class="social-share">
-                    <div class="share-text">Share your tea personality:</div>
-                    <button class="restart-btn" onclick="shareResult('Iced Tea')">Share Result</button>
-                </div>
-            </div>
-
-            <button class="restart-btn" onclick="restartQuiz()" id="restartBtn" style="display: none;">Take Quiz Again</button>
-        </div>
-        
-        <!-- FOOTER WITH YOUR STORE INFO -->
-        <div class="footer">
-            <div class="store-info">Follow us for daily tea tips, facts, and community fun!</div>
-            <div class="footer-text">
-                Made with 💚 by The Tea-ology Boutique | 
-                <a href="mailto:helloteaology@gmail.com" style="color: #28a745;">Contact Us</a>
             </div>
         </div>
     </div>
 
     <script>
-        let currentQuestion = 1;
-        let scores = {
-            energetic: 0,
-            peaceful: 0,
-            sophisticated: 0,
-            cozy: 0,
-            social: 0
+        /* ========== BRANDING CUSTOMIZATION INSTRUCTIONS ========== */
+        /*
+        
+        🎨 HOW TO CUSTOMIZE YOUR QUIZ:
+        
+        1. COLORS: 
+           - Scroll up to the CSS section and update the --brand-primary, --brand-secondary, etc. variables
+           - Use your brand's hex color codes (e.g., #FF6B6B for red)
+        
+        2. FONTS:
+           - Replace the Google Fonts import URL with your brand fonts
+           - Update the .brand-heading and .brand-body font-family values
+        
+        3. LOGO:
+           - Replace the tea emoji (🍵) with your logo image
+           - Uncomment the <img> tag and add your logo URL
+           - Or add your brand name using the commented brand name div
+        
+        4. SOCIAL MEDIA LINKS:
+           - Replace all the "#" in the social media links with your actual URLs
+           - Example: href="https://instagram.com/yourbrand"
+           - Remove any social platforms you don't use
+        
+        5. QUIZ CONTENT:
+           - Update the quiz title and description
+           - Modify questions and answers below to match your brand
+           - Change the tea personalities to match your products/services
+        
+        6. SHARE MESSAGE:
+           - Scroll down to the shareResult() function to customize the share text
+        
+        */
+        /* ========== END CUSTOMIZATION INSTRUCTIONS ========== */
+        
+        const questions = [
+            {
+                question: "What's your ideal way to start the morning?",
+                options: [
+                    { text: "Energetic workout and fresh air", points: { green: 3, iced: 1 } },
+                    { text: "Peaceful meditation or yoga", points: { chamomile: 3, green: 1 } },
+                    { text: "Reading the news with classical music", points: { earl: 3, chamomile: 1 } },
+                    { text: "Cozy breakfast with loved ones", points: { chai: 3, earl: 1 } },
+                    { text: "Quick shower and ready for adventure", points: { iced: 3, green: 1 } }
+                ]
+            },
+            {
+                question: "Your friends would describe you as:",
+                options: [
+                    { text: "The energizer who motivates everyone", points: { green: 3, iced: 2 } },
+                    { text: "The calm voice of reason", points: { chamomile: 3, earl: 1 } },
+                    { text: "The sophisticated one with great taste", points: { earl: 3, chai: 1 } },
+                    { text: "The warm hugger who brings comfort", points: { chai: 3, chamomile: 2 } },
+                    { text: "The social butterfly who adapts to any group", points: { iced: 3, green: 1 } }
+                ]
+            },
+            {
+                question: "What's your perfect evening activity?",
+                options: [
+                    { text: "Hiking or outdoor sports", points: { green: 3, iced: 1 } },
+                    { text: "Bath with candles and soft music", points: { chamomile: 3, chai: 1 } },
+                    { text: "Art gallery or classical concert", points: { earl: 3, chamomile: 1 } },
+                    { text: "Game night with close friends", points: { chai: 3, iced: 2 } },
+                    { text: "Rooftop party or social gathering", points: { iced: 3, green: 1 } }
+                ]
+            },
+            {
+                question: "How do you handle stress?",
+                options: [
+                    { text: "Exercise it away with high energy", points: { green: 3, iced: 1 } },
+                    { text: "Deep breathing and mindfulness", points: { chamomile: 3, earl: 1 } },
+                    { text: "Organize and plan methodically", points: { earl: 3, chai: 1 } },
+                    { text: "Talk it through with someone caring", points: { chai: 3, chamomile: 2 } },
+                    { text: "Change scenery and try something new", points: { iced: 3, green: 1 } }
+                ]
+            },
+            {
+                question: "Your ideal vacation would be:",
+                options: [
+                    { text: "Adventure hiking in mountains", points: { green: 3, iced: 1 } },
+                    { text: "Peaceful retreat at a spa", points: { chamomile: 3, earl: 1 } },
+                    { text: "Cultural tour of historic cities", points: { earl: 3, chai: 1 } },
+                    { text: "Cozy cabin with family/friends", points: { chai: 3, chamomile: 1 } },
+                    { text: "Beach resort with lots of activities", points: { iced: 3, green: 2 } }
+                ]
+            },
+            {
+                question: "What motivates you most?",
+                options: [
+                    { text: "Achieving personal fitness goals", points: { green: 3, iced: 1 } },
+                    { text: "Finding inner peace and balance", points: { chamomile: 3, earl: 1 } },
+                    { text: "Appreciating life's finer details", points: { earl: 3, chai: 1 } },
+                    { text: "Creating warmth and connection", points: { chai: 3, chamomile: 1 } },
+                    { text: "Meeting new people and experiences", points: { iced: 3, green: 1 } }
+                ]
+            }
+        ];
+
+        const teaPersonalities = {
+            green: {
+                title: "Green Tea Personality",
+                emoji: "🍃",
+                description: "You're energetic, vibrant, and full of life! Like green tea, you're refreshing and invigorating to be around. You love staying active, trying new challenges, and inspiring others with your natural vitality. Your zest for life is contagious!"
+            },
+            chamomile: {
+                title: "Chamomile Tea Personality", 
+                emoji: "🌼",
+                description: "You're the peaceful soul everyone turns to for comfort. Like chamomile tea, you bring calm and serenity wherever you go. You value mindfulness, inner peace, and creating harmonious environments. Your gentle nature is a gift to the world."
+            },
+            earl: {
+                title: "Earl Grey Personality",
+                emoji: "🎩", 
+                description: "You're sophisticated, refined, and have impeccable taste. Like Earl Grey tea, you appreciate the finer things in life and bring elegance to everything you do. You're thoughtful, cultured, and have a natural sense of style that others admire."
+            },
+            chai: {
+                title: "Chai Tea Personality",
+                emoji: "🤗",
+                description: "You're warm, nurturing, and create the coziest atmosphere wherever you go. Like chai tea, you're a perfect blend of comfort and spice. You love bringing people together, sharing stories, and making everyone feel at home. Your caring nature warms hearts."
+            },
+            iced: {
+                title: "Iced Tea Personality", 
+                emoji: "🧊",
+                description: "You're social, adaptable, and effortlessly cool! Like iced tea, you're refreshing and perfect for any occasion. You love meeting new people, trying different experiences, and can fit in anywhere. Your flexibility and social charm make you everyone's favorite companion."
+            }
         };
 
-        function answer(questionId, type) {
-            scores[type]++;
-            
-            // Hide current question
-            document.getElementById(questionId).classList.remove('active');
-            
-            // Update progress bar
-            const progress = (currentQuestion / 6) * 100;
+        let currentQuestionIndex = 0;
+        let scores = { green: 0, chamomile: 0, earl: 0, chai: 0, iced: 0 };
+
+        function startQuiz() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            scores = { green: 0, chamomile: 0, earl: 0, chai: 0, iced: 0 };
+            updateProgress();
+            showQuestion();
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / questions.length) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
-            
-            currentQuestion++;
-            
-            if (currentQuestion <= 6) {
-                // Show next question
-                document.getElementById('q' + currentQuestion).classList.add('active');
-            } else {
-                // Show result
-                showResult();
-            }
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex;
+            document.getElementById('totalQuestions').textContent = questions.length;
         }
 
-        function showResult() {
-            // Find the highest score
-            let maxScore = 0;
-            let resultType = 'energetic';
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionCard = document.getElementById('questionCard');
             
-            for (let type in scores) {
-                if (scores[type] > maxScore) {
-                    maxScore = scores[type];
-                    resultType = type;
-                }
-            }
+            questionCard.classList.add('question-exit');
             
-            // Show the result
-            document.getElementById('result-' + resultType).classList.add('active');
-            document.getElementById('restartBtn').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('questionText').textContent = question.question;
+                
+                const optionsContainer = document.getElementById('optionsContainer');
+                optionsContainer.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'w-full bg-white/20 hover:bg-white/30 text-white p-4 rounded-xl text-left transition-all duration-300 option-hover border border-white/10';
+                    button.textContent = option.text;
+                    button.onclick = () => selectAnswer(option.points);
+                    optionsContainer.appendChild(button);
+                });
+                
+                questionCard.classList.remove('question-exit');
+                questionCard.classList.add('question-enter');
+                
+                setTimeout(() => {
+                    questionCard.classList.remove('question-enter');
+                }, 500);
+            }, 250);
         }
 
-        function restartQuiz() {
-            // Reset scores
-            scores = {
-                energetic: 0,
-                peaceful: 0,
-                sophisticated: 0,
-                cozy: 0,
-                social: 0
-            };
-            
-            // Hide all results
-            document.querySelectorAll('.result').forEach(result => {
-                result.classList.remove('active');
+        function selectAnswer(points) {
+            // Add points to scores
+            Object.keys(points).forEach(tea => {
+                scores[tea] += points[tea];
             });
             
-            // Hide restart button
-            document.getElementById('restartBtn').style.display = 'none';
+            currentQuestionIndex++;
+            updateProgress();
             
-            // Reset progress bar
-            document.getElementById('progressBar').style.width = '0%';
-            
-            // Show first question
-            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
-            document.getElementById('q1').classList.add('active');
-            
-            currentQuestion = 1;
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(showQuestion, 300);
+            } else {
+                setTimeout(showResults, 500);
+            }
         }
 
-        function shareResult(teaType) {
-            const storeName = "The Tea-ology Boutique"; // CHANGE THIS TO YOUR STORE NAME
-            const storeHandle = "@theteaologyboutique"; // CHANGE THIS TO YOUR SOCIAL MEDIA HANDLE
+        function showResults() {
+            // Find the tea with highest score
+            let maxScore = 0;
+            let resultTea = 'green';
             
-            const text = `I just discovered I'm a ${teaType} personality! 🍃 What's your tea personality? Take the quiz at ${storeName} ${storeHandle} and find out!`;
+            Object.keys(scores).forEach(tea => {
+                if (scores[tea] > maxScore) {
+                    maxScore = scores[tea];
+                    resultTea = tea;
+                }
+            });
+            
+            const result = teaPersonalities[resultTea];
+            
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            
+            document.getElementById('resultEmoji').textContent = result.emoji;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.description;
+            
+            updateProgress();
+        }
+
+        function shareResult() {
+            const resultTitle = document.getElementById('resultTitle').textContent;
+            const resultEmoji = document.getElementById('resultEmoji').textContent;
+            
+            const shareText = `I just discovered I'm a ${resultTitle}! ${resultEmoji} Take the Tea-ology Personality Quiz and find out which tea matches your personality!`;
             
             if (navigator.share) {
                 navigator.share({
                     title: 'Tea Personality Quiz Result',
-                    text: text,
+                    text: shareText,
                     url: window.location.href
                 });
             } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(text + '\n' + window.location.href).then(() => {
-                    alert('Result copied to clipboard! Share it on your social media! 🎉');
+                // Fallback for browsers that don't support Web Share API
+                navigator.clipboard.writeText(shareText + ' ' + window.location.href).then(() => {
+                    alert('Result copied to clipboard! Share it on your favorite social media platform.');
                 });
             }
         }
+
+        function restartQuiz() {
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            scores = { green: 0, chamomile: 0, earl: 0, chai: 0, iced: 0 };
+            updateProgress();
+        }
+
+        // Initialize progress display
+        updateProgress();
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977f806147a09d0f',t:'MTc1NjY3NDQ4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
