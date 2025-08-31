@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Tea-ology Personality Quiz</title>
+    <title>The TEA-ology Personality Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* ========== BRANDING CUSTOMIZATION SECTION ========== */
         /* Update these values to match your brand */
         
         /* FONTS - Replace with your brand fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
-        /* COLORS - Update these hex codes to match your brand palette */
+        /* COLORS - Duck egg blue palette with complimentary colors */
         :root {
-            --brand-primary: #60bbb5;      /* Main brand color */
-            --brand-secondary: #7a4850;    /* Secondary brand color */
-            --brand-accent: #95a09d;       /* Accent color */
-            --brand-light: #DEB887;        /* Light brand color */
-            --brand-lightest: #F5DEB3;     /* Lightest brand color */
-            --text-primary: #000000;       /* Primary text color */
-            --text-secondary: #f3e8ff;     /* Secondary text color */
+            --brand-primary: #8FBC8F;      /* Duck egg blue-green */
+            --brand-secondary: #87CEEB;    /* Sky blue */
+            --brand-accent: #B0E0E6;       /* Powder blue */
+            --brand-light: #E0F6FF;        /* Very light blue */
+            --brand-lightest: #F0F8FF;     /* Alice blue */
+            --text-primary: #374151;       /* Dark grey text color */
+            --text-secondary: #4B5563;     /* Medium grey text */
         }
         
         /* BACKGROUND GRADIENT - Customize your brand gradient */
@@ -34,8 +34,8 @@
         }
         
         /* BRAND FONTS - Update font families */
-        .brand-heading { font-family: 'Playfair Display', serif; }
-        .brand-body { font-family: 'Inter', sans-serif; }
+        .brand-heading { font-family: 'Poppins', sans-serif; }
+        .brand-body { font-family: 'Poppins', sans-serif; }
         
         /* ========== END CUSTOMIZATION SECTION ========== */
         
@@ -89,24 +89,15 @@
         }
     </style>
 </head>
-<body class="min-h-screen tea-gradient font-['Inter']">
+<body class="min-h-screen tea-gradient font-['Poppins']">
     <div class="container mx-auto px-4 py-8 max-w-2xl">
         <!-- Header -->
         <div class="text-center mb-8 fade-in">
-            <!-- BRAND LOGO SECTION - Replace with your logo -->
-            <div class="mb-4">
-                <!-- Option 1: Replace emoji with your logo image -->
-                <div class="logo.jpg">The Tea-ology Boutique</div>
-                <!-- Option 2: Uncomment and add your logo URL -->
-                <!-- <img src="YOUR_LOGO_URL_HERE" alt="Your Brand Logo" class="h-16 mx-auto mb-2" onerror="this.style.display='none'"> -->
-                
-                <!-- Option 3: Add your brand name -->
-                <!-- <div class="text-2xl font-bold text-white mb-2">YOUR BRAND NAME</div> -->
-            </div>
+
             
             <!-- QUIZ TITLE - Customize this -->
-            <h1 class="text-4xl brand-heading font-bold text-white mb-2">The Tea-ology Personality Quiz</h1>
-            <p class="text-amber-100 text-lg brand-body">Discover which tea matches your personality!</p>
+            <h1 class="text-4xl brand-heading font-bold text-gray-700 mb-2">Tea Personality Quiz</h1>
+            <p class="text-gray-600 text-lg brand-body">Discover which tea matches your unique personality!</p>
         </div>
 
         <!-- Progress Bar -->
@@ -114,16 +105,16 @@
             <div class="bg-white/20 rounded-full h-3 overflow-hidden">
                 <div id="progressBar" class="progress-bar bg-white h-full rounded-full" style="width: 0%"></div>
             </div>
-            <p class="text-white text-center mt-2 text-sm">
+            <p class="text-gray-600 text-center mt-2 text-sm">
                 Question <span id="currentQuestion">0</span> of <span id="totalQuestions">6</span>
             </p>
         </div>
 
         <!-- Start Screen -->
         <div id="startScreen" class="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 fade-in">
-            <h2 class="text-2xl font-['Playfair_Display'] font-semibold text-white mb-4">Ready to discover your tea personality?</h2>
-            <p class="text-amber-100 mb-6">Answer 6 questions and find out which tea perfectly matches who you are!</p>
-            <button onclick="startQuiz()" class="bg-white text-amber-800 px-8 py-3 rounded-full font-semibold text-lg hover:bg-amber-50 transition-all duration-300 transform hover:scale-105">
+            <h2 class="text-2xl font-['Poppins'] font-semibold text-gray-700 mb-4">Ready to discover your tea personality?</h2>
+            <p class="text-gray-600 mb-6">Answer 6 fun questions and find out which tea perfectly matches who you are!</p>
+            <button onclick="startQuiz()" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105">
                 Start Quiz ✨
             </button>
         </div>
@@ -131,7 +122,7 @@
         <!-- Quiz Container -->
         <div id="quizContainer" class="hidden">
             <div id="questionCard" class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                <h2 id="questionText" class="text-xl font-['Playfair_Display'] font-semibold text-white mb-6 text-center"></h2>
+                <h2 id="questionText" class="text-xl font-['Poppins'] font-semibold text-gray-700 mb-6 text-center"></h2>
                 <div id="optionsContainer" class="space-y-3"></div>
             </div>
         </div>
@@ -140,53 +131,56 @@
         <div id="resultsScreen" class="hidden text-center">
             <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 fade-in">
                 <div id="resultEmoji" class="text-6xl mb-4"></div>
-                <h2 class="text-3xl font-['Playfair_Display'] font-bold text-white mb-4">You are...</h2>
-                <h3 id="resultTitle" class="text-2xl font-['Playfair_Display'] font-semibold text-amber-200 mb-4"></h3>
-                <p id="resultDescription" class="text-white text-lg mb-6 leading-relaxed"></p>
+                <h2 class="text-3xl font-['Poppins'] font-bold text-gray-700 mb-4">You are...</h2>
+                <h3 id="resultTitle" class="text-2xl font-['Poppins'] font-semibold text-gray-600 mb-4"></h3>
+                <p id="resultDescription" class="text-gray-700 text-lg mb-6 leading-relaxed"></p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-                    <button onclick="shareResult()" class="bg-white text-amber-800 px-6 py-3 rounded-full font-semibold hover:bg-amber-50 transition-all duration-300 transform hover:scale-105">
+                    <button onclick="shareResult()" class="bg-white text-teal-700 px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105">
                         Share Result 📱
                     </button>
-                    <button onclick="restartQuiz()" class="bg-amber-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-amber-700 transition-all duration-300 transform hover:scale-105">
+                    <button onclick="restartQuiz()" class="bg-teal-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-700 transition-all duration-300 transform hover:scale-105">
                         Take Again 🔄
                     </button>
                 </div>
                 
                 <!-- SOCIAL MEDIA LINKS SECTION - Add your social media -->
                 <div class="border-t border-white/20 pt-6">
-                    <p class="text-white/80 text-sm mb-4">Follow us for more fun quizzes!</p>
-                    <div class="flex justify-center gap-4">
+                    <p class="text-gray-600 text-sm mb-4">Follow us for more fun quizzes!</p>
+                    <div class="flex justify-center gap-4 flex-wrap">
                         <!-- Replace # with your actual social media URLs -->
-                        <a href="https://www.instagram.com/theteaologyboutique" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Instagram">
+                        <a href="https://www.instagram.com/theteaologyboutique" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Instagram">
                             <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                             </svg>
                         </a>
-                                         
-                        <a href="https://www.facebook.com/profile.php?id=61579978653142" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Facebook">
+                        
+                        <a href="https://www.facebook.com/profile.php?id=61579978653142" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Facebook">
                             <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                             </svg>
                         </a>
                         
-                        <a href="http://tiktok.com/@teaology_" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="TikTok">
+                        <a href="http://tiktok.com/@teaology_" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="TikTok">
                             <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
                             </svg>
                         </a>
                         
-                        <!-- Add more social platforms as needed -->
-                        <a href="http://theteaologyboutique.etsy.com" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Etsy">
+                        <a href="https://uk.pinterest.com/helloteaology" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Pinterest">
                             <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.112.221.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.748-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.90-5.367 11.99-12.013C24.007 5.367 18.641.001.012.017z"/>
                             </svg>
                         </a>
-                        <a href="https://uk.pinterest.com/helloteaology" target="_blank" class="bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Pinterest">
-                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
                         
+                        <a href="http://theteaologyboutique.etsy.com" target="_blank" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-full transition-all duration-300 transform hover:scale-110" title="Etsy">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9.16504 11.55078h2.26367c.45703 0 .91406-.22852 .91406-.68555s-.45703-.68555-.91406-.68555H9.16504c-.45703 0-.91406.22852-.91406.68555s.45703.68555.91406.68555zm0 0"/>
+                                <path d="M24 12c0 6.62695-5.37305 12-12 12S0 18.62695 0 12 5.37305 0 12 0s12 5.37305 12 12zM6.61719 6.61719c-.45703 0-.91406.22852-.91406.68555v9.39453c0 .45703.45703.68555.91406.68555h10.76562c.45703 0 .91406-.22852.91406-.68555V7.30273c0-.45703-.45703-.68555-.91406-.68555zm0 0"/>
+                                <path d="M15.65625 8.875c-.45703 0-.91406.22852-.91406.68555v5.87891c0 .45703.45703.68555.91406.68555s.91406-.22852.91406-.68555V9.56055c0-.45703-.45703-.68555-.91406-.68555zm0 0"/>
+                                <path d="M12.80859 8.875c-.45703 0-.91406.22852-.91406.68555v5.87891c0 .45703.45703.68555.91406.68555s.91406-.22852.91406-.68555V9.56055c0-.45703-.45703-.68555-.91406-.68555zm0 0"/>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -352,7 +346,7 @@
                 
                 question.options.forEach((option, index) => {
                     const button = document.createElement('button');
-                    button.className = 'w-full bg-white/20 hover:bg-white/30 text-white p-4 rounded-xl text-left transition-all duration-300 option-hover border border-white/10';
+                    button.className = 'w-full bg-white/90 hover:bg-white text-gray-800 p-4 rounded-xl text-left transition-all duration-300 option-hover border border-white/30 shadow-sm hover:shadow-md';
                     button.textContent = option.text;
                     button.onclick = () => selectAnswer(option.points);
                     optionsContainer.appendChild(button);
@@ -411,7 +405,7 @@
             const resultTitle = document.getElementById('resultTitle').textContent;
             const resultEmoji = document.getElementById('resultEmoji').textContent;
             
-            const shareText = `I just discovered I'm a ${resultTitle}! ${resultEmoji} Take the Tea-ology Personality Quiz and find out which tea matches your personality!`;
+            const shareText = `I just discovered I'm a ${resultTitle}! ${resultEmoji} Take the Tea Personality Quiz and find out which tea matches your personality!`;
             
             if (navigator.share) {
                 navigator.share({
@@ -438,5 +432,5 @@
         // Initialize progress display
         updateProgress();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977f806147a09d0f',t:'MTc1NjY3NDQ4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977fd2d4e32abeb3',t:'MTc1NjY3Nzg2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
